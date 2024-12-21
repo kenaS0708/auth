@@ -1,25 +1,35 @@
-from flask import Flask, request
-import hashlib
+from telegram import Bot, Update, InlineKeyboardMarkup, InlineKeyboardButton
+from telegram.ext import CommandHandler, Updater
 
-app = Flask(__name__)
+# Ваш токен бота
 BOT_TOKEN = "7901063068:AAFL955WOGlXooiiMXDWmv_N0LSgi5B-JrM"
 
-def check_telegram_auth(data):
-    check_hash = data.pop("hash")
-    data_check_string = "\n".join(
-        [f"{k}={v}" for k, v in sorted(data.items())]
-    )
-    secret_key = hashlib.sha256(BOT_TOKEN.encode()).digest()
-    calculated_hash = hashlib.sha256(data_check_string.encode()).hexdigest()
-    return check_hash == calculated_hash
+# URL вашего Telegram Mini App
+WEB_APP_URL = "https://example.com"  # Замените на свой адрес
 
-@app.route("/auth", methods=["GET", "POST"])
-def auth():
-    data = request.args.to_dict() if request.method == "GET" else request.form.to_dict()
-    if check_telegram_auth(data):
-        return f"Добро пожаловать, {data['first_name']}!"
-    else:
-        return "Ошибка авторизации!", 403
+def start(update: Update, context):
+    keyboard = [
+        [
+            InlineKeyboardButton(
+                text="Открыть Mini App", web_app={"url": WEB_APP_URL}
+            )
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
+    update.message.reply_text(
+        text="Привет! Нажми на кнопку ниже, чтобы открыть наше приложение!",
+        reply_markup=reply_markup
+    )
+
+def main():
+    updater = Updater(BOT_TOKEN, use_context=True)
+
+    dp = updater.dispatcher
+    dp.add_handler(CommandHandler("start", start))
+
+    updater.start_polling()
+    updater.idle()
 
 if __name__ == "__main__":
-    app.run()
+    main()
