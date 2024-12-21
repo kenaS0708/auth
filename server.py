@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 
 # Секретный токен вашего бота (получите его у BotFather)
-BOT_TOKEN = "ваш_токен_бота"
+BOT_TOKEN = "7901063068:AAFL955WOGlXooiiMXDWmv_N0LSgi5B-JrM"
 SECRET_KEY = sha256(BOT_TOKEN.encode()).digest()
 
 
