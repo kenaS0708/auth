@@ -2,7 +2,7 @@ from flask import Flask, request
 import hashlib
 
 app = Flask(__name__)
-BOT_TOKEN = "ВАШ_ТОКЕН_БОТА"
+BOT_TOKEN = "7901063068:AAFL955WOGlXooiiMXDWmv_N0LSgi5B-JrM"
 
 def check_telegram_auth(data):
     check_hash = data.pop("hash")
